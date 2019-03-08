@@ -59,8 +59,79 @@ function databasePlayers() {
   return database;
 }
 
+// CARICO ID NELL'INPUT
+function upgradeDOM(playerslist) {
+  var datalist = $("#players");
+  for (var i = 0; i < playerslist.length; i++) {
+    var id = playerslist[i].id;
+    var newElement = document.createElement("option");
+    newElement.value = id;
+    datalist.append(newElement);
+  }
+  return;
+}
+
+// CANCELLO VALORI AL CLICK DEL BOTTONE
+function clearClick() {
+  var button = $("#clear-btn");
+  button.click(function() {
+    var input = $("#usr-input");
+    input.val("");
+
+    var idDOM = $("#id .content");
+    var pointsDOM = $("#points .content");
+    var bounceDOM = $("#bounce .content");
+    var mistakeDOM = $("#mistake .content");
+    var twoPercDOM = $("#twoPerc .content");
+    var threePercDOM = $("#threePerc .content");
+
+    idDOM.text("");
+    pointsDOM.text("");
+    bounceDOM.text("");
+    mistakeDOM.text("");
+    twoPercDOM.text("");
+    threePercDOM.text("");
+  });
+}
+
+// TROVO IL PLAYER CORRISPONDENTE
+function findSelected(id, players) {
+  var player;
+  for (var i = 0; i < players.length; i++) {
+    if (id == players[i].id) {
+      player = players[i];
+    }
+  }
+  return player;
+}
+
+// MOSTRO NEL DOM I VALORI DEL PLAYER SELEZIONATO
+function showSelected(players) {
+  var valueSelected = $("#usr-input").val();
+  var player = findSelected(valueSelected, players);
+
+  var idDOM = $("#id .content");
+  var pointsDOM = $("#points .content");
+  var bounceDOM = $("#bounce .content");
+  var mistakeDOM = $("#mistake .content");
+  var twoPercDOM = $("#twoPerc .content");
+  var threePercDOM = $("#threePerc .content");
+
+  idDOM.text(player.id);
+  pointsDOM.text(player.points);
+  bounceDOM.text(player.bounce);
+  mistakeDOM.text(player.mistake);
+  twoPercDOM.text(player.twoPerc + "%");
+  threePercDOM.text(player.threePerc + "%");
+}
+
 function init() {
-  console.log(getRandom(1,3));
-  console.log(playersGenerator());
-  console.log(databasePlayers());
+  var players = databasePlayers();
+  upgradeDOM(players); //AGGIUNGO LA LISTA DEI PLAYERS NELL'INPUT
+  clearClick();
+
+  var userInput = $("#usr-input"); //AL CAMBIO DELL'INPUT RICHIAMO LA FUNZIONE showSelected
+  userInput.change(function(){
+  showSelected(players);
+});
 }
